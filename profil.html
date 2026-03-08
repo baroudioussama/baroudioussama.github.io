@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Baroudi Oussama — AI & Full-Stack Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inconsolata:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --surface2: #1a1a24;
+      --border: #2a2a38;
+      --accent: #00e5a0;
+      --accent2: #0af;
+      --text: #e8e8f0;
+      --muted: #7070a0;
+      --font-display: 'Syne', sans-serif;
+      --font-mono: 'Inconsolata', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-mono);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* NOISE OVERLAY */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 4rem;
+      background: rgba(10,10,15,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 8rem 4rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.3;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 100%);
+    }
+    .hero-glow {
+      position: absolute;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(0,229,160,0.08) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .hero-content { position: relative; max-width: 900px; }
+    .hero-tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid rgba(0,229,160,0.3);
+      padding: 0.3rem 0.8rem;
+      border-radius: 2px;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.6s ease both;
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+    .hero h1 span { color: var(--accent); }
+    .hero-tagline {
+      margin-top: 1.5rem;
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 560px;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+    .hero-cta {
+      margin-top: 2.5rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.8rem;
+      text-decoration: none;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #0a0a0f;
+      font-weight: 600;
+    }
+    .btn-primary:hover { background: #00ffb3; transform: translateY(-2px); }
+    .btn-outline {
+      border: 1px solid var(--border);
+      color: var(--text);
+      background: transparent;
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+    /* SECTIONS */
+    section {
+      padding: 6rem 4rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 3rem;
+      color: var(--text);
+    }
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ABOUT */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .about-text p {
+      color: #b0b0c8;
+      margin-bottom: 1.2rem;
+      font-size: 0.95rem;
+    }
+    .about-text p strong { color: var(--accent); font-weight: 500; }
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      border-radius: 4px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .stat-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .stat-number {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .stat-desc { font-size: 0.78rem; color: var(--muted); margin-top: 0.3rem; letter-spacing: 0.05em; }
+
+    /* SKILLS */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+    .skill-group {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.5rem;
+      transition: border-color 0.2s;
+    }
+    .skill-group:hover { border-color: rgba(0,229,160,0.4); }
+    .skill-group-title {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .tag {
+      background: var(--surface2);
+      color: #a0a0c0;
+      padding: 0.25rem 0.65rem;
+      border-radius: 2px;
+      font-size: 0.75rem;
+      border: 1px solid var(--border);
+      transition: all 0.15s;
+    }
+    .tag:hover { color: var(--accent); border-color: var(--accent); }
+
+    /* EXPERIENCE */
+    .exp-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 4px;
+      padding: 2rem 2.5rem;
+      margin-bottom: 2rem;
+    }
+    .exp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.2rem;
+    }
+    .exp-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .exp-company { color: var(--accent); font-size: 0.85rem; margin-top: 0.2rem; }
+    .exp-date {
+      font-size: 0.75rem;
+      color: var(--muted);
+      background: var(--surface2);
+      padding: 0.3rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      white-space: nowrap;
+    }
+    .exp-achievements { list-style: none; }
+    .exp-achievements li {
+      padding: 0.5rem 0;
+      font-size: 0.88rem;
+      color: #a0a0c0;
+      border-bottom: 1px solid rgba(42,42,56,0.5);
+      padding-left: 1.2rem;
+      position: relative;
+    }
+    .exp-achievements li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+    .exp-achievements li:last-child { border-bottom: none; }
+    .exp-achievements li strong { color: var(--text); font-weight: 500; }
+
+    /* PROJECTS */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.8rem;
+      transition: border-color 0.2s, transform 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .project-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+    .project-card.placeholder { opacity: 0.5; border-style: dashed; }
+    .project-icon { font-size: 1.8rem; }
+    .project-name {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .project-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.6; }
+    .project-stack { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .project-links { margin-top: auto; display: flex; gap: 0.75rem; }
+    .project-link {
+      font-size: 0.75rem;
+      color: var(--accent2);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      transition: color 0.2s;
+    }
+    .project-link:hover { color: var(--accent); }
+
+    /* EDUCATION */
+    .edu-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.8rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .edu-degree {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .edu-school { color: var(--muted); font-size: 0.85rem; margin-top: 0.3rem; }
+    .edu-year {
+      font-size: 0.8rem;
+      color: var(--accent);
+      background: rgba(0,229,160,0.08);
+      border: 1px solid rgba(0,229,160,0.25);
+      padding: 0.4rem 1rem;
+      border-radius: 2px;
+      white-space: nowrap;
+    }
+
+    /* CONNECT */
+    .connect-section {
+      text-align: center;
+      padding: 6rem 4rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .connect-section .section-title { margin-bottom: 1rem; }
+    .connect-subtitle {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 3rem;
+      line-height: 1.8;
+    }
+    .connect-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+    .connect-link {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 0.8rem 1.5rem;
+      border-radius: 2px;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 0.82rem;
+      transition: all 0.2s;
+    }
+    .connect-link:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+    .connect-link span { font-size: 1rem; }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero { padding: 7rem 1.5rem 3rem; }
+      section { padding: 4rem 1.5rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .exp-card { padding: 1.5rem; }
+      .connect-section { padding: 4rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#">BO.</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#connect">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" style="max-width:100%; padding-top:8rem;">
+    <div class="hero-grid-bg"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+      <div class="hero-tag">Available for opportunities</div>
+      <h1>Baroudi<br><span>Oussama</span></h1>
+      <p class="hero-tagline">
+        ICT Student · AI/ML Engineer · Full-Stack Developer —
+        building intelligent systems that think, not just run.
+      </p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn btn-primary">View My Work</a>
+        <a href="#connect" class="btn btn-outline">Get In Touch</a>
+        <a href="https://github.com/baroudioussama" target="_blank" class="btn btn-outline">GitHub ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="reveal">
+      <div class="section-label">// 01 — about</div>
+      <h2 class="section-title">Who I Am</h2>
+    </div>
+    <div class="about-grid reveal">
+      <div class="about-text">
+        <p>
+          I'm a curious <strong>ICT student from Tunis</strong> on a mission to bridge the gap between cutting-edge AI and real-world business problems. I believe the most exciting software isn't just functional — it <em>thinks</em>.
+        </p>
+        <p>
+          My journey has taken me from academic ML experiments to building <strong>production-ready, AI-powered applications</strong> during my internship at Scheidt & Bachmann Maghreb, a global tech leader. I built a full-stack expense tracker with ML auto-categorization, financial health scoring, and intelligent budget recommendations — from zero to deployed.
+        </p>
+        <p>
+          Whether I'm training a classification model, designing a <strong>REST API</strong>, or containerizing a full-stack app with Docker, I bring the same energy to every layer of the stack. I'm actively looking for opportunities to contribute to <strong>AI-driven products</strong> and keep growing fast while doing it.
+        </p>
+      </div>
+      <div class="about-stats">
+        <div class="stat-card">
+          <div class="stat-number">1</div>
+          <div class="stat-desc">Internship at a multinational tech company</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">5+</div>
+          <div class="stat-desc">ML & full-stack projects built end-to-end</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">4</div>
+          <div class="stat-desc">ML frameworks mastered (sklearn, TF, PyTorch, HF)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">3</div>
+          <div class="stat-desc">Languages spoken (Arabic, English, French)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="reveal">
+      <div class="section-label">// 02 — skills</div>
+      <h2 class="section-title">Tech Stack</h2>
+    </div>
+    <div class="skills-grid reveal">
+      <div class="skill-group">
+        <div class="skill-group-title">Machine Learning & AI</div>
+        <div class="skill-tags">
+          <span class="tag">scikit-learn</span>
+          <span class="tag">TensorFlow</span>
+          <span class="tag">PyTorch</span>
+          <span class="tag">Hugging Face</span>
+          <span class="tag">Model Training</span>
+          <span class="tag">Data Annotation</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Backend & APIs</div>
+        <div class="skill-tags">
+          <span class="tag">Python</span>
+          <span class="tag">FastAPI</span>
+          <span class="tag">REST APIs</span>
+          <span class="tag">JWT Auth</span>
+          <span class="tag">bcrypt</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Data & Databases</div>
+        <div class="skill-tags">
+          <span class="tag">PostgreSQL</span>
+          <span class="tag">SQLAlchemy</span>
+          <span class="tag">pandas</span>
+          <span class="tag">NumPy</span>
+          <span class="tag">openpyxl</span>
+          <span class="tag">Excel / Sheets</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">DevOps & Tools</div>
+        <div class="skill-tags">
+          <span class="tag">Docker</span>
+          <span class="tag">Git / GitHub</span>
+          <span class="tag">ChatGPT Automation</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Languages</div>
+        <div class="skill-tags">
+          <span class="tag">Arabic — Native</span>
+          <span class="tag">English — B2+</span>
+          <span class="tag">French — B1+</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="reveal">
+      <div class="section-label">// 03 — experience</div>
+      <h2 class="section-title">Where I've Worked</h2>
+    </div>
+    <div class="exp-card reveal">
+      <div class="exp-header">
+        <div>
+          <div class="exp-title">Software Development Intern</div>
+          <div class="exp-company">Scheidt & Bachmann Maghreb — Tunisia</div>
+        </div>
+        <div class="exp-date">December 2025</div>
+      </div>
+      <ul class="exp-achievements">
+        <li><strong>AI & ML:</strong> Designed and trained an ML model for automatic expense categorization from raw text descriptions and merchant names — cutting manual input to near zero.</li>
+        <li><strong>Backend Architecture:</strong> Built a secure, scalable API layer using FastAPI + PostgreSQL + SQLAlchemy with full JWT + bcrypt authentication.</li>
+        <li><strong>Intelligent Features:</strong> Implemented personalized budget recommendations, financial health scoring, and 50-30-20 rule enforcement.</li>
+        <li><strong>Analytics:</strong> Delivered monthly spending statistics and trend analysis to give users actionable financial insights.</li>
+        <li><strong>DevOps:</strong> Containerized the entire app with Docker, ensuring consistent, reproducible dev and production environments.</li>
+        <li><strong>Collaboration:</strong> Worked within a team under real-world company guidelines, covering the full development lifecycle from design through testing and deployment.</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="reveal">
+      <div class="section-label">// 04 — projects</div>
+      <h2 class="section-title">Featured Work</h2>
+    </div>
+    <div class="projects-grid reveal">
+
+      <div class="project-card">
+        <div class="project-icon">💸</div>
+        <div class="project-name">AI-Powered Expense Tracker</div>
+        <div class="project-desc">Full-stack personal finance app with ML auto-categorization of expenses, financial health scoring, personalized budget recommendations, and 50-30-20 rule enforcement. Built as internship capstone.</div>
+        <div class="project-stack">
+          <span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">PostgreSQL</span><span class="tag">Docker</span><span class="tag">scikit-learn</span><span class="tag">JWT</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/baroudioussama" target="_blank" class="project-link">→ GitHub</a>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-icon">🧠</div>
+        <div class="project-name">ML Recognition Suite</div>
+        <div class="project-desc">A collection of supervised learning projects: Speech Emotion Recognition, CIFAR-10 CNN Image Classification, and Flower Classification. Covers the full ML lifecycle from data annotation to model evaluation.</div>
+        <div class="project-stack">
+          <span class="tag">TensorFlow</span><span class="tag">PyTorch</span><span class="tag">scikit-learn</span><span class="tag">pandas</span><span class="tag">NumPy</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/baroudioussama" target="_blank" class="project-link">→ GitHub</a>
+        </div>
+      </div>
+
+      <div class="project-card placeholder">
+        <div class="project-icon">🚧</div>
+        <div class="project-name">Next Project — Coming Soon</div>
+        <div class="project-desc">This slot is reserved for my next build. Check back soon or follow my GitHub to be the first to know.</div>
+        <div class="project-stack">
+          <span class="tag">TBD</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/baroudioussama" target="_blank" class="project-link">→ GitHub</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- EDUCATION -->
+  <section id="education">
+    <div class="reveal">
+      <div class="section-label">// 05 — education</div>
+      <h2 class="section-title">Academic Background</h2>
+    </div>
+    <div class="edu-card reveal">
+      <div>
+        <div class="edu-degree">Licence in Information & Communication Technology (ICT)</div>
+        <div class="edu-school">Faculté des Sciences Mathématiques, Physiques et Naturelles de Tunis</div>
+      </div>
+      <div class="edu-year">2024 — Present</div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CONNECT -->
+  <div id="connect" class="connect-section reveal">
+    <div class="section-label">// 06 — contact</div>
+    <h2 class="section-title">Let's Build Something</h2>
+    <p class="connect-subtitle">
+      I'm open to internships, collaborations, AI/ML projects, and interesting conversations.<br>
+      My inbox is always open — feel free to reach out.
+    </p>
+    <div class="connect-links">
+      <a href="mailto:baroudi.oussema@etudiant-fst.utm.tn" class="connect-link">
+        <span>✉️</span> Email Me
+      </a>
+      <a href="https://www.linkedin.com/in/oussama-baroudi-9b333b2a2/" target="_blank" class="connect-link">
+        <span>💼</span> LinkedIn
+      </a>
+      <a href="https://github.com/baroudioussama" target="_blank" class="connect-link">
+        <span>🐙</span> GitHub
+      </a>
+      <a href="tel:+21693795445" class="connect-link">
+        <span>📱</span> +216 93 795 445
+      </a>
+    </div>
+    <a href="mailto:baroudi.oussema@etudiant-fst.utm.tn" class="btn btn-primary">Say Hello →</a>
+  </div>
+
+  <footer>
+    <p>Designed & built by Baroudi Oussama · Tunis, Tunisia · © 2025</p>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
